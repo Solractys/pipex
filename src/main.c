@@ -6,7 +6,7 @@
 /*   By: csilva-s <csilva-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 14:53:11 by csilva-s          #+#    #+#             */
-/*   Updated: 2025/12/24 22:40:17 by csilva-s         ###   ########.fr       */
+/*   Updated: 2025/12/25 19:37:33 by csilva-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ char	**find_path(char **envp)
 		if (check_path(envp[i]))
 		{
 			path = ft_split(envp[i], ':');
+			char *path_line = path[0];
+			path[0] = &path_line[5];
 			break ;
 		}
 		i++;
@@ -69,8 +71,6 @@ int	main(int argc, char **argv, char **envp)
 	cmd2 = ft_split(argv[4], ' ');
 	char **path = find_path(envp);
 	ft_print_path(path);
-	char *command = ft_strjoin( "/usr/bin/", cmd1[0]);
-	char *command2 = ft_strjoin( "/usr/bin/", cmd2[0]);
 	// connection
 	pipe(fd);
 	// 1 child
@@ -82,7 +82,9 @@ int	main(int argc, char **argv, char **envp)
 		close(fd[1]);
 		close(infile);
 		close(outfile);
+		// access logic and check if able to run
 		execve(command, cmd1, envp);
+
 		exit(0);
 	}
 	// 2 child
@@ -94,7 +96,9 @@ int	main(int argc, char **argv, char **envp)
 		close(fd[1]);
 		close(infile);
 		close(outfile);
+		// access logic and check if able to run
 		execve(command2, cmd2, envp);
+
 		exit(0);
 	}
 	close(fd[0]);
