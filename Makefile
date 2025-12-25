@@ -1,4 +1,4 @@
-NAME = "pipex"
+NAME = pipex
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -Iincludes/ft_printf -g3
@@ -10,7 +10,7 @@ OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(SRCS) $(OBJS)
+$(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 %.o: %.c
@@ -19,9 +19,9 @@ $(NAME): $(SRCS) $(OBJS)
 clean:
 	rm -f $(OBJS)
 
-fclean: clean
+fclean:	clean
 	rm -f $(NAME)
 
-re: fclean all
+re:	fclean all
 
 .PHONY: all clean fclean re
