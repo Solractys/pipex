@@ -6,13 +6,11 @@
 /*   By: csilva-s <csilva-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 14:53:11 by csilva-s          #+#    #+#             */
-/*   Updated: 2025/12/25 19:37:33 by csilva-s         ###   ########.fr       */
+/*   Updated: 2025/12/25 23:13:53 by csilva-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
-
-//  COMAND EXP:./pipex infile "ls -l" "wc -l" outfile
 
 int	check_path(char *str)
 {
@@ -55,10 +53,56 @@ void	ft_print_path(char **path)
 		ft_printf("%s\n", path[i++]);
 }
 
+int	find_correct_path(char **path, char *command)
+{
+	int	result;
+
+	result = 0;
+	while (path[result] != NULL)
+	{
+		char *pathname = ft_strjoin(path[result], "/");
+		ft_printf("%s\n", ft_strjoin(pathname, command));
+		if (access(ft_strjoin(pathname, command), X_OK) == 0)
+			return (result);
+		result++;
+	}
+	return (-1);
+}
+
+void	execute_command(char *pathname, char **command, char **envp)
+{
+	char *valid_path = ft_strjoin(pathname, "/");
+	execve(ft_strjoin(valid_path, command[0]), command, envp);
+}
+void	check_inputs(char **argv)
+{
+	if (argv[1][0] == '\0')
+	{
+		write (2, "error", 5);
+		exit(0);
+	}
+	else if (argv[2][0] == '\0')
+	{
+		write (2, "error", 5);
+		exit(0);
+	}
+	else if (argv[3][0] == '\0')
+	{
+		write (2, "error", 5);
+		exit(0);
+	}
+	else if (argv[4][0] == '\0')
+	{
+		write (2, "error", 5 );
+		exit(0);
+	}
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	if (argc != 5)
 		return (0);
+	check_inputs(argv);
 	int	fd[2];
 	int infile = open(argv[1], O_RDONLY);
 	int	outfile = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -67,10 +111,21 @@ int	main(int argc, char **argv, char **envp)
 	// parser
 	char **cmd1 = NULL;
 	char **cmd2 = NULL;
-	cmd1 = ft_split(argv[1], ' ');
-	cmd2 = ft_split(argv[4], ' ');
+	cmd1 = ft_split(argv[2], ' ');
+	cmd2 = ft_split(argv[3], ' ');
 	char **path = find_path(envp);
-	ft_print_path(path);
+	int line1 = find_correct_path(path, cmd1[0]);
+	if (line1 < 0)
+	{
+		ft_printf("this file don't exits");
+		return (0);
+	}
+	int line2 = find_correct_path(path, cmd2[0]);
+	if (line2 < 0)
+	{
+		ft_printf("this file don't exits");
+		return (0);
+	}
 	// connection
 	pipe(fd);
 	// 1 child
@@ -82,9 +137,7 @@ int	main(int argc, char **argv, char **envp)
 		close(fd[1]);
 		close(infile);
 		close(outfile);
-		// access logic and check if able to run
-		execve(command, cmd1, envp);
-
+		execute_command(path[line1], cmd1, envp);
 		exit(0);
 	}
 	// 2 child
@@ -96,9 +149,7 @@ int	main(int argc, char **argv, char **envp)
 		close(fd[1]);
 		close(infile);
 		close(outfile);
-		// access logic and check if able to run
-		execve(command2, cmd2, envp);
-
+		execute_command(path[line2], cmd2, envp);
 		exit(0);
 	}
 	close(fd[0]);
