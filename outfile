@@ -1,0 +1,11 @@
+total 84
+drwxr-xr-x  5 csilva-s candidate  4096 Dec 27 20:56 .
+drwxr-xr-x 22 csilva-s candidate  4096 Dec 19 14:49 ..
+drwxr-xr-x  8 csilva-s candidate  4096 Dec 27 21:01 .git
+-rw-r--r--  1 csilva-s candidate    23 Dec 24 15:36 .gitignore
+drwxr-xr-x  3 csilva-s candidate  4096 Dec 23 16:03 includes
+-rw-r--r--  1 csilva-s candidate     0 Dec 27 20:56 infile
+-rw-r--r--  1 csilva-s candidate   530 Dec 27 20:27 Makefile
+-rw-r--r--  1 csilva-s candidate     0 Dec 27 21:01 outfile
+-rwxr-xr-x  1 csilva-s candidate 50760 Dec 27 20:29 pipex
+drwxr-xr-x  2 csilva-s candidate  4096 Dec 27 20:53 src
