@@ -1,0 +1,60 @@
+#0  main (argc=5, argv=0x7fffffffdd08, envp=0x7fffffffdd38)
+    at src/main.c:77
+fd = {-8071, 32767}
+infile = 0
+outfile = -1075053569
+commands = {cmd1 = 0x10101000000, cmd2 = 0x2}
+info_var = {
+  line1 = 0xe30 <error: Cannot access memory at address 0xe30>, 
+  line2 = 0x7fffffffe069 "\250(h\016F\204\277⒨#Hf\345\322'x86_64", 
+  path = 0x7ffff7fc1000}
+[Attaching after Thread 0x7ffff7d7b740 (LWP 117492) fork to child process 117502]
+[New inferior 2 (process 117502)]
+Reading symbols from /usr/lib/debug/.build-id/4f/7b0c955c3d81d7cac1501a2498b69d1d82bfe7.debug...
+Reading symbols from /usr/lib/debug/.build-id/ac/af96d7b1a6bad57b559d646233d5dc1a23257c.debug...
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+[Switching to Thread 0x7ffff7d7b740 (LWP 117502)]
+main (argc=5, argv=0x7fffffffdd08, envp=0x7fffffffdd38) at src/main.c:125
+process 117502 is executing new program: /usr/bin/grep
+Reading symbols from /usr/lib/debug/.build-id/ac/af96d7b1a6bad57b559d646233d5dc1a23257c.debug...
+Reading symbols from /usr/lib/debug/.build-id/4f/7b0c955c3d81d7cac1501a2498b69d1d82bfe7.debug...
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+[Inferior 2 (process 117502) exited normally]
+The program is not being run.
+  Num  Description       Connection           Executable        
+  1    process 117492    1 (native)           /nfs/homes/csilva-s/Documentos/pipex/pipex 
+* 2    <null>                                 /usr/bin/grep     
+[Switching to inferior 1 [process 117492] (/nfs/homes/csilva-s/Documentos/pipex/pipex)]
+[Switching to thread 1.1 (Thread 0x7ffff7d7b740 (LWP 117492))]
+#0  arch_fork (ctid=0x7ffff7d7ba10)
+    at ../sysdeps/unix/sysv/linux/arch-fork.h:52
+__GI__Fork () at ../sysdeps/nptl/_Fork.c:29
+__libc_fork () at ./posix/fork.c:75
+main (argc=5, argv=0x7fffffffdd08, envp=0x7fffffffdd38) at src/main.c:135
+[Attaching after Thread 0x7ffff7d7b740 (LWP 117492) fork to child process 117545]
+[New inferior 3 (process 117545)]
+Reading symbols from /usr/lib/debug/.build-id/4f/7b0c955c3d81d7cac1501a2498b69d1d82bfe7.debug...
+Reading symbols from /usr/lib/debug/.build-id/ac/af96d7b1a6bad57b559d646233d5dc1a23257c.debug...
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+[Switching to Thread 0x7ffff7d7b740 (LWP 117545)]
+main (argc=5, argv=0x7fffffffdd08, envp=0x7fffffffdd38) at src/main.c:138
+process 117545 is executing new program: /usr/bin/wc
+Reading symbols from /usr/lib/debug/.build-id/ac/af96d7b1a6bad57b559d646233d5dc1a23257c.debug...
+Reading symbols from /usr/lib/debug/.build-id/4f/7b0c955c3d81d7cac1501a2498b69d1d82bfe7.debug...
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+[Inferior 3 (process 117545) exited normally]
+[Switching to inferior 1 [process 117492] (/nfs/homes/csilva-s/Documentos/pipex/pipex)]
+[Switching to thread 1.1 (Thread 0x7ffff7d7b740 (LWP 117492))]
+#0  arch_fork (ctid=0x7ffff7d7ba10)
+    at ../sysdeps/unix/sysv/linux/arch-fork.h:52
+__GI__Fork () at ../sysdeps/nptl/_Fork.c:29
+__libc_fork () at ./posix/fork.c:75
+main (argc=5, argv=0x7fffffffdd08, envp=0x7fffffffdd38) at src/main.c:148
+__libc_start_call_main (main=main@entry=0x4013b0 <main>, argc=argc@entry=5, argv=argv@entry=0x7fffffffdd08) at ../sysdeps/nptl/libc_start_call_main.h:74
+
+quit
+EOF [assumed Y]
