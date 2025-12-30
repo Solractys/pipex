@@ -1,14 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: csilva-s <csilva-s@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/30 00:44:09 by csilva-s          #+#    #+#             */
+/*   Updated: 2025/12/30 00:46:28 by csilva-s         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PIPEX_H
 # define PIPEX_H
 
-#include <sys/types.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <fcntl.h>
-#include "../includes/ft_printf/ft_printf.h"
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <fcntl.h>
+# include "../ft_printf/ft_printf.h"
 
-
-typedef struct
+typedef struct s_info
 {
 	char	*line1;
 	char	*line2;
@@ -19,4 +31,9 @@ typedef struct
 	int		outfile;
 }	t_info;
 
-# endif
+char	*find_line(char **path, char *command);
+char	*find_path(char	**envp);
+void	execute_routine(t_info pipex, int *fd, int child_nb, char **envp);
+void	free_path(char	**str);
+void	free_pipex(t_info pipex);
+#endif
