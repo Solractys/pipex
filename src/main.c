@@ -51,11 +51,11 @@ int	main(int argc, char **argv, char **envp)
 	pipex = init_pipex(argv, envp);
 	pipe(fd);
 	pid = fork();
-	if (pid < 0)
+	if (pid == 0)
 		execute_routine(pipex, fd, 1, envp);
 	close(fd[1]);
 	pid2 = fork();
-	if (pid2 < 0)
+	if (pid2 == 0)
 		execute_routine(pipex, fd, 2, envp);
 	close(fd[0]);
 	free_pipex(pipex);
