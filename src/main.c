@@ -6,7 +6,7 @@
 /*   By: csilva-s <csilva-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 14:53:11 by csilva-s          #+#    #+#             */
-/*   Updated: 2025/12/30 00:42:46 by csilva-s         ###   ########.fr       */
+/*   Updated: 2025/12/30 22:02:29 by csilva-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	main(int ac, char **av, char **envp)
 		if (pid == 0)
 		{
 			if (old_fd == -1)
-				old_fd = infile;
+				dup2(infile, STDIN_FILENO);
 			else
 				dup2(old_fd, STDIN_FILENO);
 			if (i == cmd_count - 1)
@@ -115,10 +115,10 @@ int	main(int ac, char **av, char **envp)
 			exit(1);
 		}
 		close(fd[1]);
-		close(old_fd);
 		old_fd = fd[0];
 		i++;
 	}
+	close(old_fd);
 	while(i-- > 0)
 	{
 		ft_printf("o caraio");
