@@ -6,7 +6,7 @@
 /*   By: csilva-s <csilva-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 00:44:09 by csilva-s          #+#    #+#             */
-/*   Updated: 2025/12/30 00:46:28 by csilva-s         ###   ########.fr       */
+/*   Updated: 2026/01/01 21:02:22 by csilva-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdio.h>
 # include <fcntl.h>
 # include "../ft_printf/ft_printf.h"
+# include "../gnl/get_next_line.h"
 
 typedef struct s_info
 {

@@ -6,7 +6,7 @@
 /*   By: csilva-s <csilva-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 14:53:11 by csilva-s          #+#    #+#             */
-/*   Updated: 2025/12/30 22:02:29 by csilva-s         ###   ########.fr       */
+/*   Updated: 2026/01/01 21:16:09 by csilva-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,34 @@ t_info	init_pipex(char **av, char **envp)
 // 	wait(NULL);
 // 	return (0);
 // }
+
+int	check_here_doc(char **av)
+{
+	int		pipe_here_doc[2];
+	char	*limiter;
+	char	*line;
+
+
+	if (ft_strncmp(av[1], "here_doc", 9) != 0)
+		return (open(av[1], O_RDONLY));
+	pipe(pipe_here_doc);
+	limiter = ft_strjoin(av[2], "\n");
+	while (1)
+	{
+		line = get_next_line(0);
+		if (!line || ft_strncmp(line, limiter, ft_strlen(limiter)) == 0)
+		{
+			free(line);
+			break ;
+		}
+		ft_putstr_fd(line, pipe_here_doc[1]);
+		free(line);
+	}
+	free(limiter);
+	close(pipe_here_doc[1]);
+	return (pipe_here_doc[0]);
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	int	fd[2];
@@ -76,7 +104,7 @@ int	main(int ac, char **av, char **envp)
 
 	if (ac < 5)
 		return (0);
-	infile = open(av[1], O_RDONLY);
+	infile = check_here_doc(av);
 	outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	cmd_count = ac - 3;
 	init_cmd = 2;
@@ -85,10 +113,10 @@ int	main(int ac, char **av, char **envp)
 	while (i < cmd_count)
 	{
 		char	**current_cmd = ft_split(av[init_cmd + i], ' ');
-		ft_printf("%s", current_cmd[0]);
 		if (i < cmd_count - 1)
 			pipe(fd);
 		pid = fork();
+		
 		if (pid == 0)
 		{
 			if (old_fd == -1)
@@ -120,12 +148,10 @@ int	main(int ac, char **av, char **envp)
 	}
 	close(old_fd);
 	while(i-- > 0)
-	{
-		ft_printf("o caraio");
 		wait(NULL);
-	}
 	close(infile);
 	close(outfile);
 	close(fd[0]);
 	close(fd[1]);
+	exit(0);
 }

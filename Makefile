@@ -1,7 +1,7 @@
 NAME = pipex
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -Iincludes/ft_printf -g3
+CFLAGS = -Wall -Wextra -Werror -Iincludes/ft_printf -Iincludes/gnl -g3
 
 SRCS = includes/ft_printf/ft_strlen.c \
 		includes/ft_printf/ft_putendl_fd.c	\
@@ -42,6 +42,8 @@ SRCS = includes/ft_printf/ft_strlen.c \
 		includes/ft_printf/ft_strlcpy.c		\
 		includes/ft_printf/ft_printf.c		\
 		includes/ft_printf/ft_isalnum.c		\
+		includes/gnl/get_next_line.c		\
+		includes/gnl/get_next_line_utils.c	\
 		src/main.c							\
 		src/exec_routine.c					\
 		src/free_utils.c					\
