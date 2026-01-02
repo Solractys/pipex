@@ -106,8 +106,16 @@ int	main(int ac, char **av, char **envp)
 		return (0);
 	infile = check_here_doc(av);
 	outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	cmd_count = ac - 3;
-	init_cmd = 2;
+	if (ft_strncmp(av[1], "here_doc", 9) == 0)
+	{
+		init_cmd = 4;
+		cmd_count = ac - 5;
+	}
+	else
+	{
+		init_cmd = 2;
+		cmd_count = ac - 5;
+	}
 	old_fd = -1;
 	i = 0;
 	while (i < cmd_count)
