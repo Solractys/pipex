@@ -6,7 +6,7 @@
 /*   By: csilva-s <csilva-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 00:44:09 by csilva-s          #+#    #+#             */
-/*   Updated: 2026/01/02 20:42:06 by csilva-s         ###   ########.fr       */
+/*   Updated: 2026/01/03 20:10:19 by csilva-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 # include <fcntl.h>
 # include "../ft_printf/ft_printf.h"
 # include "../gnl/get_next_line.h"
-
 
 typedef struct s_pipex
 {

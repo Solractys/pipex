@@ -6,7 +6,7 @@
 /*   By: csilva-s <csilva-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 14:53:11 by csilva-s          #+#    #+#             */
-/*   Updated: 2026/01/03 14:44:12 by csilva-s         ###   ########.fr       */
+/*   Updated: 2026/01/03 20:10:19 by csilva-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,10 @@ int	check_here_doc(char **av)
 	char	*limiter;
 	char	*line;
 
-
 	if (ft_strncmp(av[1], "here_doc", 9) != 0)
 		return (open(av[1], O_RDONLY));
 	pipe(pipe_here_doc);
 	limiter = ft_strjoin(av[2], "\n");
-	line = NULL;
 	while (1)
 	{
 		line = get_next_line(0);
@@ -40,7 +38,7 @@ int	check_here_doc(char **av)
 	return (pipe_here_doc[0]);
 }
 
-t_pipex	init_pipex(char **av, int ac)
+int	main(int ac,char **av, char **envp)
 {
 	int	fd[2];
 	int	cmd_count;
@@ -48,13 +46,18 @@ t_pipex	init_pipex(char **av, int ac)
 	int	infile;
 	int	outfile;
 	int	i;
-	int	pid;
 	int	old_fd;
+	int	pid;
 
 	if (ac < 5)
 		return (0);
 	infile = check_here_doc(av);
 	outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (infile == -1 || outfile == -1)
+	{
+		perror("Error opening file");
+		return (1);
+	}
 	if (ft_strncmp(av[1], "here_doc", 9) == 0)
 	{
 		cmd_count = ac - 4;
@@ -73,7 +76,6 @@ t_pipex	init_pipex(char **av, int ac)
 		if (i < cmd_count - 1)
 			pipe(fd);
 		pid = fork();
-
 		if (pid == 0)
 		{
 			if (i == 0)
@@ -97,9 +99,13 @@ t_pipex	init_pipex(char **av, int ac)
 			char	*cmd_path = find_line(path, current_cmd[0]);
 			if (!cmd_path)
 			{
+				free_path(current_cmd);
+				free(cmd_path);
+				free_path(path);
 				perror("command not found");
-				exit(1);
+				exit(127);
 			}
+			free_path(path);
 			execve(cmd_path, current_cmd, envp);
 			perror("failed");
 			exit(1);
@@ -110,11 +116,13 @@ t_pipex	init_pipex(char **av, int ac)
 			close (old_fd);
 		if (i < cmd_count - 1)
 			old_fd = fd[0];
+		free_path(current_cmd);
 		i++;
 	}
+	int	status;
 	while(i-- > 0)
-		wait(NULL);
+		wait(&status);
 	close(infile);
 	close(outfile);
-	exit(0);
+	exit(WEXITSTATUS(status));
 }
