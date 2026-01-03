@@ -6,7 +6,7 @@
 /*   By: csilva-s <csilva-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 00:26:25 by csilva-s          #+#    #+#             */
-/*   Updated: 2025/12/30 00:41:05 by csilva-s         ###   ########.fr       */
+/*   Updated: 2026/01/02 20:20:13 by csilva-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,26 +51,26 @@ char	*find_path(char	**envp)
 	return (NULL);
 }
 
-void	execute_routine(t_info pipex, int *fd, int child_nb, char **envp)
-{
-	if (child_nb == 1)
-	{
-		dup2(pipex.infile, 0);
-		dup2(fd[1], 1);
-	}
-	else
-	{
-		dup2(pipex.outfile, 1);
-		dup2(fd[0], 0);
-	}
-	close(fd[0]);
-	close(fd[1]);
-	close(pipex.infile);
-	close(pipex.outfile);
-	if (child_nb == 1)
-		execve(pipex.line1, pipex.cmd1, envp);
-	else
-		execve(pipex.line2, pipex.cmd2, envp);
-	perror("execve");
-	exit (EXIT_FAILURE);
-}
+// void	execute_routine(t_info pipex, int *fd, int child_nb, char **envp)
+// {
+// 	if (child_nb == 1)
+// 	{
+// 		dup2(pipex.infile, 0);
+// 		dup2(fd[1], 1);
+// 	}
+// 	else
+// 	{
+// 		dup2(pipex.outfile, 1);
+// 		dup2(fd[0], 0);
+// 	}
+// 	close(fd[0]);
+// 	close(fd[1]);
+// 	close(pipex.infile);
+// 	close(pipex.outfile);
+// 	if (child_nb == 1)
+// 		execve(pipex.line1, pipex.cmd1, envp);
+// 	else
+// 		execve(pipex.line2, pipex.cmd2, envp);
+// 	perror("execve");
+// 	exit (EXIT_FAILURE);
+// }
