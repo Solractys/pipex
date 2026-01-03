@@ -6,7 +6,7 @@
 /*   By: csilva-s <csilva-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 00:26:25 by csilva-s          #+#    #+#             */
-/*   Updated: 2026/01/02 20:20:13 by csilva-s         ###   ########.fr       */
+/*   Updated: 2026/01/03 20:55:51 by csilva-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,26 +51,52 @@ char	*find_path(char	**envp)
 	return (NULL);
 }
 
-// void	execute_routine(t_info pipex, int *fd, int child_nb, char **envp)
-// {
-// 	if (child_nb == 1)
-// 	{
-// 		dup2(pipex.infile, 0);
-// 		dup2(fd[1], 1);
-// 	}
-// 	else
-// 	{
-// 		dup2(pipex.outfile, 1);
-// 		dup2(fd[0], 0);
-// 	}
-// 	close(fd[0]);
-// 	close(fd[1]);
-// 	close(pipex.infile);
-// 	close(pipex.outfile);
-// 	if (child_nb == 1)
-// 		execve(pipex.line1, pipex.cmd1, envp);
-// 	else
-// 		execve(pipex.line2, pipex.cmd2, envp);
-// 	perror("execve");
-// 	exit (EXIT_FAILURE);
-// }
+void	execute_command(char **envp, char **current_cmd)
+{
+	char	**path;
+	char	*cmd_path;
+
+	path = ft_split(find_path(envp), ':');
+	cmd_path = find_line(path, current_cmd[0]);
+	if (!cmd_path)
+	{
+		free_path(current_cmd);
+		free(cmd_path);
+		free_path(path);
+		perror("command not found");
+		exit(127);
+	}
+	free_path(path);
+	execve(cmd_path, current_cmd, envp);
+	perror("failed");
+	exit(1);
+}
+
+void	children_routine(t_pipex pipex, char **av, char **envp)
+{
+	int		i;
+	char	**current_cmd;
+	int		pid;
+
+	i = 0;
+	while (i < pipex.cmd_count)
+	{
+		current_cmd = ft_split(av[pipex.init_cmd + i], ' ');
+		if (i < pipex.cmd_count - 1)
+			pipe(pipex.fd);
+		pid = fork();
+		if (pid == 0)
+		{
+			redirect_and_close(i, pipex);
+			execute_command(envp, current_cmd);
+		}
+		if (i < pipex.cmd_count - 1)
+			close(pipex.fd[1]);
+		if (pipex.old_fd != -1)
+			close (pipex.old_fd);
+		if (i < pipex.cmd_count - 1)
+			pipex.old_fd = pipex.fd[0];
+		free_path(current_cmd);
+		i++;
+	}
+}
