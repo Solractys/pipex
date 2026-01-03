@@ -12,58 +12,6 @@
 
 #include "../includes/pipex.h"
 
-t_info	init_pipex(char **av, char **envp)
-{
-	t_info	pipex;
-
-	pipex.infile = open(av[1], O_RDONLY);
-	pipex.outfile = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (pipex.infile < 0 || pipex.outfile < 0)
-	{
-		close(pipex.infile);
-		close(pipex.outfile);
-		perror("file");
-		exit (EXIT_FAILURE);
-	}
-	pipex.cmd1 = ft_split(av[2], ' ');
-	pipex.cmd2 = ft_split(av[3], ' ');
-	pipex.path = ft_split(find_path(envp), ':');
-	if (!pipex.path || !pipex.cmd1 || !pipex.cmd2)
-	{
-		free_pipex(pipex);
-		perror("command error");
-		exit (1);
-	}
-	pipex.line1 = find_line(pipex.path, pipex.cmd1[0]);
-	pipex.line2 = find_line(pipex.path, pipex.cmd2[0]);
-	return (pipex);
-}
-
-// int	main(int argc, char **argv, char **envp)
-// {
-// 	t_info	pipex;
-// 	int		fd[2];
-// 	int		pid;
-// 	int		pid2;
-//
-// 	if (argc != 5)
-// 		return (0);
-// 	pipex = init_pipex(argv, envp);
-// 	pipe(fd);
-// 	pid = fork();
-// 	if (pid == 0)
-// 		execute_routine(pipex, fd, 1, envp);
-// 	close(fd[1]);
-// 	pid2 = fork();
-// 	if (pid2 == 0)
-// 		execute_routine(pipex, fd, 2, envp);
-// 	close(fd[0]);
-// 	free_pipex(pipex);
-// 	wait(NULL);
-// 	wait(NULL);
-// 	return (0);
-// }
-
 int	check_here_doc(char **av)
 {
 	int		pipe_here_doc[2];
@@ -106,8 +54,16 @@ int	main(int ac, char **av, char **envp)
 		return (0);
 	infile = check_here_doc(av);
 	outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	cmd_count = ac - 3;
-	init_cmd = 2;
+	if (ft_strncmp(av[1], "here_doc", 9) == 0)
+	{
+		cmd_count = ac - 4;
+		init_cmd = 3;
+	}
+	else
+	{
+		cmd_count = ac - 3;
+		init_cmd = 2;
+	}
 	old_fd = -1;
 	i = 0;
 	while (i < cmd_count)
@@ -119,7 +75,7 @@ int	main(int ac, char **av, char **envp)
 		
 		if (pid == 0)
 		{
-			if (old_fd == -1)
+			if (i == 0)
 				dup2(infile, STDIN_FILENO);
 			else
 				dup2(old_fd, STDIN_FILENO);
@@ -127,8 +83,13 @@ int	main(int ac, char **av, char **envp)
 				dup2(outfile, STDOUT_FILENO);
 			else
 				dup2(fd[1], STDOUT_FILENO);
-			close(fd[0]);
-			close(fd[1]);
+			if (i < cmd_count - 1)
+			{
+				close(fd[0]);
+				close(fd[1]);
+			}
+			if (i > 0)
+				close(old_fd);
 			close(infile);
 			close(outfile);
 			char	**path = ft_split(find_path(envp), ':');
@@ -142,16 +103,17 @@ int	main(int ac, char **av, char **envp)
 			perror("failed");
 			exit(1);
 		}
-		close(fd[1]);
-		old_fd = fd[0];
+		if (i < cmd_count - 1)
+			close(fd[1]);
+		if (old_fd != -1)
+			close (old_fd);
+		if (i < cmd_count - 1)
+			old_fd = fd[0];
 		i++;
 	}
-	close(old_fd);
 	while(i-- > 0)
 		wait(NULL);
 	close(infile);
 	close(outfile);
-	close(fd[0]);
-	close(fd[1]);
 	exit(0);
 }
