@@ -6,7 +6,7 @@
 /*   By: csilva-s <csilva-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 14:53:11 by csilva-s          #+#    #+#             */
-/*   Updated: 2026/01/03 20:55:08 by csilva-s         ###   ########.fr       */
+/*   Updated: 2026/01/04 19:38:26 by csilva-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	check_here_doc(char **av)
 	limiter = ft_strjoin(av[2], "\n");
 	while (1)
 	{
+		ft_printf("> ");
 		line = get_next_line(0);
 		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0)
 		{
@@ -43,7 +44,10 @@ t_pipex	init_pipex(char **av, int ac)
 	t_pipex	pipex;
 
 	pipex.infile = check_here_doc(av);
-	pipex.outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (ft_strncmp(av[1], "here_doc", 9) == 0)
+		pipex.outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+	else
+		pipex.outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (pipex.infile == -1 || pipex.outfile == -1)
 	{
 		perror("Error opening file");
@@ -60,6 +64,7 @@ t_pipex	init_pipex(char **av, int ac)
 		pipex.init_cmd = 2;
 	}
 	pipex.old_fd = -1;
+	pipex.pid = malloc(sizeof(pid_t) * pipex.cmd_count);
 	return (pipex);
 }
 
@@ -91,12 +96,15 @@ int	main(int ac, char **av, char **envp)
 	int		i;
 
 	if (ac < 5)
-		return (0);
+	{
+		ft_printf("Usage: ./pipex infile cat 'wc -l' outfile");
+		return (1);
+	}
 	pipex = init_pipex(av, ac);
 	children_routine(pipex, av, envp);
-	i = pipex.cmd_count - 1;
-	while (i-- > 0)
-		wait(&status);
+	i = 0;
+	while (pipex.pid[i] != 0)
+		waitpid(pipex.pid[i++], &status, 0);
 	close(pipex.infile);
 	close(pipex.outfile);
 	exit(WEXITSTATUS(status));

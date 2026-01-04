@@ -6,7 +6,7 @@
 /*   By: csilva-s <csilva-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 00:44:09 by csilva-s          #+#    #+#             */
-/*   Updated: 2026/01/03 20:46:30 by csilva-s         ###   ########.fr       */
+/*   Updated: 2026/01/04 19:18:18 by csilva-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,13 @@
 
 typedef struct s_pipex
 {
-	int	fd[2];
-	int	cmd_count;
-	int	init_cmd;
-	int	infile;
-	int	outfile;
-	int	old_fd;
+	int		fd[2];
+	int		cmd_count;
+	int		init_cmd;
+	int		infile;
+	int		outfile;
+	int		old_fd;
+	pid_t	*pid;
 }	t_pipex;
 
 void	execute_routine(char **current_cmd, char **envp);

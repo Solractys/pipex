@@ -6,7 +6,7 @@
 /*   By: csilva-s <csilva-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 00:26:25 by csilva-s          #+#    #+#             */
-/*   Updated: 2026/01/03 20:55:51 by csilva-s         ###   ########.fr       */
+/*   Updated: 2026/01/04 19:34:41 by csilva-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ void	execute_command(char **envp, char **current_cmd)
 	if (!cmd_path)
 	{
 		free_path(current_cmd);
-		free(cmd_path);
 		free_path(path);
+		free(cmd_path);
 		perror("command not found");
 		exit(127);
 	}
@@ -87,6 +87,7 @@ void	children_routine(t_pipex pipex, char **av, char **envp)
 		pid = fork();
 		if (pid == 0)
 		{
+			pipex.pid[i] = pid;
 			redirect_and_close(i, pipex);
 			execute_command(envp, current_cmd);
 		}
