@@ -6,7 +6,7 @@
 /*   By: csilva-s <csilva-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 00:25:26 by csilva-s          #+#    #+#             */
-/*   Updated: 2026/01/05 17:04:59 by csilva-s         ###   ########.fr       */
+/*   Updated: 2026/01/06 09:06:48 by csilva-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,10 @@ void	free_pipex(t_info pipex)
 		free_path(pipex.cmd2);
 	close(pipex.infile);
 	close(pipex.outfile);
+}
+
+void	handle_error_msg(char *str, int error_code)
+{
+	ft_putendl_fd(str, 2);
+	exit(error_code);
 }

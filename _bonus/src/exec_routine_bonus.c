@@ -6,7 +6,7 @@
 /*   By: csilva-s <csilva-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 00:26:25 by csilva-s          #+#    #+#             */
-/*   Updated: 2026/01/05 17:09:23 by csilva-s         ###   ########.fr       */
+/*   Updated: 2026/01/06 10:21:41 by csilva-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	execute_command(char **envp, char **current_cmd)
 	free_path(path);
 	execve(cmd_path, current_cmd, envp);
 	perror("failed");
+	free(cmd_path);
 	exit(1);
 }
 
@@ -89,10 +90,10 @@ void	children_routine(t_pipex pipex, char **av, char **envp)
 		pid = fork();
 		if (pid == 0)
 		{
-			pipex.pid[i] = pid;
 			redirect_and_close(i, pipex);
 			execute_command(envp, current_cmd);
 		}
+		pipex.pid[i] = pid;
 		if (i < pipex.cmd_count - 1)
 			close(pipex.fd[1]);
 		if (pipex.old_fd != -1)

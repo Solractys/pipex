@@ -6,7 +6,7 @@
 /*   By: csilva-s <csilva-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 14:53:11 by csilva-s          #+#    #+#             */
-/*   Updated: 2026/01/05 15:23:39 by csilva-s         ###   ########.fr       */
+/*   Updated: 2026/01/06 10:32:47 by csilva-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,7 @@ t_pipex	init_pipex(char **av, int ac)
 		pipex.outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
 		pipex.outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (pipex.infile == -1 || pipex.outfile == -1)
-	{
-		perror("Error opening file");
-		exit(1);
-	}
+	handle_error_fd(pipex.infile, pipex.outfile);
 	if (ft_strncmp(av[1], "here_doc", 9) == 0)
 	{
 		pipex.cmd_count = ac - 4;
@@ -63,6 +59,7 @@ t_pipex	init_pipex(char **av, int ac)
 		pipex.cmd_count = ac - 3;
 		pipex.init_cmd = 2;
 	}
+	handle_error_cmd(pipex.cmd_count, pipex.init_cmd, av);
 	pipex.old_fd = -1;
 	pipex.pid = malloc(sizeof(pid_t) * pipex.cmd_count);
 	return (pipex);
@@ -96,16 +93,16 @@ int	main(int ac, char **av, char **envp)
 	int		i;
 
 	if (ac < 5)
-	{
-		ft_printf("Usage: ./pipex infile cat 'wc -l' outfile");
-		return (1);
-	}
+		handle_error_msg("Usage: ./pipex infile cat 'wc -l' outfile", 1);
 	pipex = init_pipex(av, ac);
 	children_routine(pipex, av, envp);
 	i = 0;
-	while (pipex.pid[i] != 0)
+	while (i < pipex.cmd_count)
 		waitpid(pipex.pid[i++], &status, 0);
+	free(pipex.pid);
 	close(pipex.infile);
 	close(pipex.outfile);
-	exit(WEXITSTATUS(status));
+	if (WEXITSTATUS(status))
+		return (WEXITSTATUS(status));
+	return (0);
 }

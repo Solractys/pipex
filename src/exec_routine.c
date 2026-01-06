@@ -6,7 +6,7 @@
 /*   By: csilva-s <csilva-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 00:26:25 by csilva-s          #+#    #+#             */
-/*   Updated: 2026/01/05 16:51:15 by csilva-s         ###   ########.fr       */
+/*   Updated: 2026/01/06 08:32:07 by csilva-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void	execute_routine(t_info pipex, int *fd, int child_nb, char **envp)
 		execve(pipex.line1, pipex.cmd1, envp);
 	else
 		execve(pipex.line2, pipex.cmd2, envp);
-	perror("execve");
-	exit (EXIT_FAILURE);
+	free_pipex(pipex);
+	perror("\b");
+	exit (127);
 }

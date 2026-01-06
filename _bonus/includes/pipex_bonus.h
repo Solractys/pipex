@@ -6,7 +6,7 @@
 /*   By: csilva-s <csilva-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 00:44:09 by csilva-s          #+#    #+#             */
-/*   Updated: 2026/01/05 16:16:58 by csilva-s         ###   ########.fr       */
+/*   Updated: 2026/01/06 10:25:00 by csilva-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,17 @@ typedef struct s_pipex
 	pid_t	*pid;
 }	t_pipex;
 
-void	execute_routine(char **current_cmd, char **envp);
-void	free_pipex(t_pipex *pipex);
+void	handle_error_msg(char *str, int error_code);
+void	handle_error_fd(int infile, int outfile);
+void	handle_error_cmd(int cmd_count, int init_cmd, char **av);
+
 void	execute_command(char **envp, char **current_cmd);
 char	*find_line(char **path, char *command);
 char	*find_path(char	**envp);
-void	free_path(char	**str);
 void	redirect_and_close(int i, t_pipex pipex);
 void	children_routine(t_pipex pipex, char **av, char **envp);
+
+void	free_path(char	**str);
 t_pipex	init_pipex(char **av, int ac);
 
 #endif

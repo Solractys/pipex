@@ -46,7 +46,7 @@ SRCS = includes/ft_printf/ft_strlen.c \
 		includes/ft_printf/ft_isalnum.c		\
 		src/main.c							\
 		src/exec_routine.c					\
-		src/free_utils.c					\
+		src/free_utils.c
 
 SRCS_BONUS = _bonus/includes/ft_printf/ft_strlen.c \
 			_bonus/includes/ft_printf/ft_putendl_fd.c	\
@@ -92,6 +92,7 @@ SRCS_BONUS = _bonus/includes/ft_printf/ft_strlen.c \
 			_bonus/src/main_bonus.c							\
 			_bonus/src/exec_routine_bonus.c					\
 			_bonus/src/free_utils_bonus.c					\
+			_bonus/src/error_handle.c
 
 ARGS ?=
 
