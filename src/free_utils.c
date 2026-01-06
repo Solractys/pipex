@@ -6,7 +6,7 @@
 /*   By: csilva-s <csilva-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 00:25:26 by csilva-s          #+#    #+#             */
-/*   Updated: 2025/12/30 00:26:02 by csilva-s         ###   ########.fr       */
+/*   Updated: 2026/01/05 17:04:59 by csilva-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,15 @@ void	free_path(char	**str)
 
 void	free_pipex(t_info pipex)
 {
-	free_path(pipex.cmd1);
-	free_path(pipex.cmd2);
 	free_path(pipex.path);
-	free(pipex.line1);
-	free(pipex.line2);
+	if (pipex.line1 != NULL)
+		free(pipex.line1);
+	if (pipex.line2 != NULL)
+		free(pipex.line2);
+	if (pipex.cmd1 != NULL)
+		free_path(pipex.cmd1);
+	if (pipex.cmd2 != NULL)
+		free_path(pipex.cmd2);
 	close(pipex.infile);
 	close(pipex.outfile);
 }

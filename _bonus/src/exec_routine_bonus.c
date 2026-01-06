@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_routine.c                                     :+:      :+:    :+:   */
+/*   exec_routine_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: csilva-s <csilva-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 00:26:25 by csilva-s          #+#    #+#             */
-/*   Updated: 2026/01/04 19:34:41 by csilva-s         ###   ########.fr       */
+/*   Updated: 2026/01/05 17:09:23 by csilva-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
+#include "../includes/pipex_bonus.h"
 
 char	*find_line(char **path, char *command)
 {
@@ -20,6 +20,8 @@ char	*find_line(char **path, char *command)
 
 	if (access(command, F_OK | X_OK) == 0)
 		return (command);
+	if (command[0] == '/' && access(command, F_OK | X_OK) != 0)
+		return (NULL);
 	i = 0;
 	cmd = ft_strjoin("/", command);
 	while (path[i] != NULL)
@@ -78,8 +80,8 @@ void	children_routine(t_pipex pipex, char **av, char **envp)
 	char	**current_cmd;
 	int		pid;
 
-	i = 0;
-	while (i < pipex.cmd_count)
+	i = -1;
+	while (++i < pipex.cmd_count)
 	{
 		current_cmd = ft_split(av[pipex.init_cmd + i], ' ');
 		if (i < pipex.cmd_count - 1)
@@ -98,6 +100,5 @@ void	children_routine(t_pipex pipex, char **av, char **envp)
 		if (i < pipex.cmd_count - 1)
 			pipex.old_fd = pipex.fd[0];
 		free_path(current_cmd);
-		i++;
 	}
 }
