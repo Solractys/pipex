@@ -6,7 +6,7 @@
 /*   By: csilva-s <csilva-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 14:53:11 by csilva-s          #+#    #+#             */
-/*   Updated: 2026/01/06 09:02:11 by csilva-s         ###   ########.fr       */
+/*   Updated: 2026/01/06 11:39:36 by csilva-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ void	handle_error_input(int ac, char **av)
 		handle_error_msg("first command don't exist", 1);
 	if (av[3][0] == '\0')
 		handle_error_msg("second command doen't exist", 1);
+	is_empty_cmd(av[2]);
+	is_empty_cmd(av[3]);
 }
 
 t_info	init_pipex(int ac, char **av, char **envp)

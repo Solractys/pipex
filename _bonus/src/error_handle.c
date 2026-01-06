@@ -6,7 +6,7 @@
 /*   By: csilva-s <csilva-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/06 09:15:46 by csilva-s          #+#    #+#             */
-/*   Updated: 2026/01/06 10:27:23 by csilva-s         ###   ########.fr       */
+/*   Updated: 2026/01/06 11:41:11 by csilva-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,17 @@ void	handle_error_msg(char *str, int error_code)
 	exit(error_code);
 }
 
+void	is_empty_cmd(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] == 32 || str[i] == 12 || str[i] == 13 || str[i] == 14)
+		i++;
+	if ((int)ft_strlen(str) == i)
+		handle_error_msg("Invalid command", 1);
+}
+
 void	handle_error_cmd(int cmd_count, int init_cmd, char **av)
 {
 	int	i;
@@ -25,6 +36,7 @@ void	handle_error_cmd(int cmd_count, int init_cmd, char **av)
 	i = 0;
 	while (i <= cmd_count)
 	{
+		is_empty_cmd(av[init_cmd + i]);
 		if (av[init_cmd + i][0] == '\0')
 			handle_error_msg("Invalid commands", 1);
 		i++;

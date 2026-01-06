@@ -6,7 +6,7 @@
 /*   By: csilva-s <csilva-s@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 00:25:26 by csilva-s          #+#    #+#             */
-/*   Updated: 2026/01/06 09:06:48 by csilva-s         ###   ########.fr       */
+/*   Updated: 2026/01/06 11:40:53 by csilva-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,15 @@ void	handle_error_msg(char *str, int error_code)
 {
 	ft_putendl_fd(str, 2);
 	exit(error_code);
+}
+
+void	is_empty_cmd(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] == 32 || str[i] == 12 || str[i] == 13 || str[i] == 14)
+		i++;
+	if ((int)ft_strlen(str) == i)
+		handle_error_msg("Invalid command", 1);
 }
